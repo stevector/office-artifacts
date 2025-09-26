@@ -10,7 +10,7 @@
   "author": "@pantheon-systems",
   "scripts": {
     "dev": "next dev --turbopack -p 3001",
-    "build": "next build",
+    "build": "printenv && next build",
     "start": "next start",
     "lint": "next lint",
     "prettier": "prettier \"**/*.{js,jsx,md}\" --check --ignore-path .prettierignore",
