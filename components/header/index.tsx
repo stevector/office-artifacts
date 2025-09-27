@@ -4,7 +4,7 @@ import React from "react";
 import PantheonLogoBlack from "../../assets/logos/pantheon-fist-black.png";
 import { Button } from "../ui/button";
 import NavMenu, { NavItem, navItems } from "./nav";
-import SearchBar from "./search-bar";
+
 
 export default function Header() {
   return (
@@ -29,7 +29,7 @@ export default function Header() {
         </nav>
 
         <div className="flex items-center gap-3">
-          <SearchBar />
+
 
           <nav className="hidden gap-3 lg:flex">
             {navItems.buttons.map((button) => (
