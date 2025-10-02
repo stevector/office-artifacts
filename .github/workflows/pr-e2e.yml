@@ -1,13 +1,12 @@
 name: Pull Request End-to-End Tests
 
 concurrency:
-  group: ${{ github.workflow }}-live
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
   cancel-in-progress: false
 
 on:
-  push:
-    branches:
-      - main
+  pull_request:
+    types: [opened, synchronize]
 
 jobs:
   end_to_end_tests:
