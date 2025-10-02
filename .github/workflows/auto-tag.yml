@@ -13,6 +13,26 @@ jobs:
       contents: write # Needed to create and push the tag
 
     steps:
+      - name: Configure Git identity
+        run: |
+          # The name of the person who pushed/merged the commit
+          GIT_USER_NAME="${{ github.actor }}"
+          
+          # The default no-reply email for the user's account
+          # The format is ID+USERNAME@users.noreply.github.com
+          GIT_USER_EMAIL="${{ github.actor }}@users.noreply.github.com" 
+          
+          # NOTE: The actual no-reply email is technically more complex
+          # (it includes the user ID: 41898282+github-actions[bot]@users.noreply.github.com),
+          # but for Git configuration purposes, many find using the simple format
+          # with the actor's username to be sufficient and cleaner.
+          # For maximum accuracy, you'd use a more complex context expression, 
+          # but let's stick to the reliable and simple `github.actor` for the name, and a standard bot format for email, 
+          # or the simple ${{ github.actor }}@users.noreply.github.com which works well.
+          
+          git config user.name "$GIT_USER_NAME"
+          git config user.email "$GIT_USER_EMAIL"
+          echo "Git identity set for: $GIT_USER_NAME <$GIT_USER_EMAIL>"
       - name: Checkout repository
         uses: actions/checkout@v4
         # We need to fetch all tags to find the highest one
