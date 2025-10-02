@@ -1,10 +1,13 @@
 name: Auto-Tag Live Deployments
 
+concurrency:
+  group: ${{ github.workflow }}-live
+  cancel-in-progress: false
+
 on:
   push:
     branches:
       - main
-      - autotag-action
 
 jobs:
   create_next_live_tag:
@@ -68,11 +71,8 @@ jobs:
           NEW_TAG="${TAG_PREFIX}${NEXT_NUMBER}"
           echo "NEW_TAG=${NEW_TAG}" >> $GITHUB_OUTPUT
 
-
-          git log --decorate
           # Create the new tag on the current commit
           git tag -a "${NEW_TAG}" -m "Auto-generated live deployment tag ${NEW_TAG}"
-          git log --decorate
 
-      # - name: Push the new tag
-      #   run: git push origin ${{ steps.tagger.outputs.NEW_TAG }}
+      - name: Push the new tag
+        run: git push origin ${{ steps.tagger.outputs.NEW_TAG }}
