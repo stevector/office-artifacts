@@ -13,6 +13,12 @@ jobs:
       contents: write # Needed to create and push the tag
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        # We need to fetch all tags to find the highest one
+        with:
+          fetch-depth: 0
+
       - name: Configure Git identity
         run: |
           # The name of the person who pushed/merged the commit
@@ -33,11 +39,6 @@ jobs:
           git config user.name "$GIT_USER_NAME"
           git config user.email "$GIT_USER_EMAIL"
           echo "Git identity set for: $GIT_USER_NAME <$GIT_USER_EMAIL>"
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        # We need to fetch all tags to find the highest one
-        with:
-          fetch-depth: 0
 
       - name: Find and create next tag
         id: tagger
