@@ -12,6 +12,7 @@ runs:
     steps:
 
       - name: Configure Git identity
+        shell: bash
         run: |
           # The name of the person who pushed/merged the commit
           GIT_USER_NAME="${{ github.actor }}"
@@ -34,6 +35,7 @@ runs:
 
       - name: Find and create next tag
         id: tagger
+        shell: bash
         env:
           INPUT_TARGET_ENV: ${{ inputs.target_env }}
         run: |
@@ -66,5 +68,6 @@ runs:
           git tag -a "${NEW_TAG}" -m "Auto-generated live deployment tag ${NEW_TAG}"
 
       - name: Push the new tag
+        shell: bash
         run: git push origin ${{ steps.tagger.outputs.NEW_TAG }}
 
