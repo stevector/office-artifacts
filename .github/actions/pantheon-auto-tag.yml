@@ -11,12 +11,6 @@ runs:
     using: 'composite'
     steps:
 
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        # We need to fetch all tags to find the highest one
-        with:
-          fetch-depth: 0
-
       - name: Configure Git identity
         run: |
           # The name of the person who pushed/merged the commit

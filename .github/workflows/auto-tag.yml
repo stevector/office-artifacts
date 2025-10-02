@@ -16,6 +16,13 @@ jobs:
       contents: write # Needed to create and push the tag
 
     steps:
+
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      # We need to fetch all tags to find the highest one
+      with:
+        fetch-depth: 0
+
     - uses: ./.github/actions/pantheon-auto-tag
       with:
         target_env: test
