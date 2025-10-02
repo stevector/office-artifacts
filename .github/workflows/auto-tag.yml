@@ -1,0 +1,57 @@
+name: Auto-Tag Live Deployments
+
+on:
+  push:
+    branches:
+      - main
+      - autotag-action
+
+jobs:
+  create_next_live_tag:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Needed to create and push the tag
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        # We need to fetch all tags to find the highest one
+        with:
+          fetch-depth: 0
+
+      - name: Find and create next tag
+        id: tagger
+        run: |
+          # Define the tag prefix
+          TAG_PREFIX="pantheon_live_"
+
+          # 1. Fetch all tags and filter only those starting with the prefix.
+          # 2. Use sed to remove the prefix, leaving only the integer.
+          # 3. Sort numerically in reverse order (-nr).
+          # 4. Take the first line (the highest number).
+          HIGHEST_NUMBER=$(git tag -l "${TAG_PREFIX}*" | \
+                            sed "s/${TAG_PREFIX}//" | \
+                            sort -nr | \
+                            head -n 1)
+
+          # If no tags are found, start at 1. Otherwise, increment the highest number.
+          if [ -z "$HIGHEST_NUMBER" ]; then
+            NEXT_NUMBER=1
+            echo "No existing tags found with prefix '${TAG_PREFIX}'. Starting at 1."
+          else
+            NEXT_NUMBER=$((HIGHEST_NUMBER + 1))
+            echo "Highest existing tag number is ${HIGHEST_NUMBER}. Next tag number will be ${NEXT_NUMBER}."
+          fi
+
+          # Construct the full new tag name
+          NEW_TAG="${TAG_PREFIX}${NEXT_NUMBER}"
+          echo "NEW_TAG=${NEW_TAG}" >> $GITHUB_OUTPUT
+
+
+          git log --decorate
+          # Create the new tag on the current commit
+          git tag -a "${NEW_TAG}" -m "Auto-generated live deployment tag ${NEW_TAG}"
+          git log --decorate
+
+      # - name: Push the new tag
+      #   run: git push origin ${{ steps.tagger.outputs.NEW_TAG }}
