@@ -8,14 +8,13 @@ inputs:
     description: ' '
     required: true
 
-
 runs:
     using: 'composite'
     steps:
 
-
       - name: ⏳ Wait for Pantheon Deployment
         id: wait_for_deployment
+        shell: bash
         env:
           EXPECTED_SHA: ${{ github.event.pull_request.head.sha }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
