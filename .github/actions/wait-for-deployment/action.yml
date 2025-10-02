@@ -26,6 +26,8 @@ runs:
           echo "Waiting for commit SHA: $EXPECTED_SHA"
           URL="https://pr-${INPUT_TARGET_ENV}-${INPUT_PANTHEON_SITE_NAME}.pantheonsite.io/current-sha.txt"
 
+          echo "checking ${URL}"
+
           for i in {1..1000}; do
             curl -s "$URL?ts=$(date +%s)"
             # Use curl with -s (silent) and capture the output
