@@ -23,5 +23,5 @@ jobs:
 
     - uses: ./.github/actions/wait-for-deployment
       with:
-        target_env: pr-{{ github.event.pull_request.number }}
+        target_env: pr-${{ github.event.pull_request.number }}
         pantheon_site_machine_name: office-artifacts
