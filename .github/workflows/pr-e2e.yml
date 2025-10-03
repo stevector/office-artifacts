@@ -1,19 +1,18 @@
-name: Auto-Tag Live Deployments
+name: Pull Request End-to-End Tests
 
 concurrency:
-  group: ${{ github.workflow }}-live
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
   cancel-in-progress: false
 
 on:
-  push:
-    branches:
-      - main
+  pull_request:
+    types: [opened, synchronize]
 
 jobs:
-  create_next_live_tag:
+  end_to_end_tests:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
 
     steps:
     - name: Checkout repository
@@ -22,11 +21,7 @@ jobs:
       with:
         fetch-depth: 0
 
-    - uses: ./.github/actions/pantheon-auto-tag
-      with:
-        target_env: live
-
     - uses: ./.github/actions/wait-for-deployment
       with:
-        target_env: live
+        target_env: pr-${{ github.event.pull_request.number }}
         pantheon_site_machine_name: office-artifacts
