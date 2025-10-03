@@ -13,10 +13,9 @@ jobs:
   create_next_live_tag:
     runs-on: ubuntu-latest
     permissions:
-      contents: write # Needed to create and push the tag
+      contents: write
 
     steps:
-
     - name: Checkout repository
       uses: actions/checkout@v4
       # We need to fetch all tags to find the highest one
@@ -25,4 +24,9 @@ jobs:
 
     - uses: ./.github/actions/pantheon-auto-tag
       with:
-        target_env: test
+        target_env: live
+
+    - uses: ./.github/actions/wait-for-deployment
+      with:
+        target_env: live
+        pantheon_site_machine_name: office-artifacts
