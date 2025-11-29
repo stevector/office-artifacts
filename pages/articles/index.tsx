@@ -55,7 +55,7 @@ export default function ArticlesListTemplate({
   );
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps({ res }) {
   // Fetch the site and articles in parallel
   const [site, { data: articles, totalCount, cursor }] = await Promise.all([
     PCCConvenienceFunctions.getSite(),
