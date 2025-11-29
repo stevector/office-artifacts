@@ -64,6 +64,17 @@ export async function getServerSideProps() {
     }),
   ]);
 
+
+  // Use a low s-maxage but I high stale-while-revalidate
+  // to increase the likelihood of both
+  // 1. a fast response from the CDN (thanks to serving stale for up to 24 hours)
+  // 2. New content getting displayed quickly
+  // (since the CDN should only consider a response fresh for 5 seconds)
+  res.setHeader(
+    'Cache-Control',
+    'public, s-maxage=5, stale-while-revalidate=86400'
+  );
+
   return {
     props: {
       articles,
