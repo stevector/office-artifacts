@@ -16,11 +16,12 @@ export function middleware(request: NextRequest) {
   //x-fastly-orig-host
   // pcontext-site-env
   // x-proto
-
+  // Is the site Machine name available as an env var?
+  const siteMachineName = "office-artifacts";
   const incomingProtocol = request.headers.get('x-proto');
   const policyDocSurrogateKey = request.headers.get('policy-doc-surrogate-key') || '';
-  console.log('incomingProtocol: ' + incomingProtocol + ' policyDocSurrogateKey: ' + policyDocSurrogateKey + 'HELLO');
-  if (incomingProtocol === 'http://' && policyDocSurrogateKey && policyDocSurrogateKey.trim().endsWith('.pantheonsite.io')) {
+  console.log('incomingProtocol: ' + incomingProtocol + ' policyDocSurrogateKey: ' + policyDocSurrogateKey);
+  if (incomingProtocol === 'http://' && policyDocSurrogateKey && policyDocSurrogateKey.trim().endsWith(siteMachineName + '.pantheonsite.io')) {
 
     url.protocol = "https:";
     url.hostname = policyDocSurrogateKey;
