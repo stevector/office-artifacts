@@ -22,13 +22,16 @@ export function middleware(request: NextRequest) {
   const incomingProtocol = request.headers.get('x-proto') || '';
   const policyDocSurrogateKey = request.headers.get('policy-doc-surrogate-key') || '';
   console.log('incomingProtocol: ' + incomingProtocol + ' policyDocSurrogateKey: ' + policyDocSurrogateKey);
-  if (incomingProtocol === 'http://' && policyDocSurrogateKey && policyDocSurrogateKey.trim().endsWith(siteMachineName + '.pantheonsite.io')) {
+  if (incomingProtocol === 'http://' && policyDocSurrogateKey) {
+    if(policyDocSurrogateKey.trim().endsWith(siteMachineName + '.pantheonsite.io') ||
+      policyDocSurrogateKey === 'office-artifacts.stevector.com') {
 
     url.protocol = "https:";
     url.hostname = policyDocSurrogateKey;
     url.port = "";
     // Use a 301 permanent redirect
     return NextResponse.redirect(url.toString(), 301);
+    }
   }
 
   if (siteEnv === 'pr-17' || siteEnv === 'live') {
