@@ -36,7 +36,7 @@ export function middleware(request: NextRequest) {
 
   if (siteEnv === 'pr-17' || siteEnv === 'live') {
     console.log('inside siteEnv check');
-    if (policyDocSurrogateKey === 'pr-17-office-artifacts.pantheonsite.io' || policyDocSurrogateKey === 'live-office-artifacts.pantheonsite.io') {
+    if (policyDocSurrogateKey === 'pr-17-office-artifacts.pantheonsite.io' || policyDocSurrogateKey === 'live-office-artifacts.pantheonsite.io' || policyDocSurrogateKey === 'office-artifacts-redirect.stevector.com') {
       url.protocol = "https:";
       url.hostname = "office-artifacts.stevector.com";
       url.port = "";
