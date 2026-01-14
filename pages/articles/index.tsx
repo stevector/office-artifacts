@@ -8,6 +8,8 @@ import queryString from "query-string";
 import ArticleList from "../../components/article-list";
 import Layout from "../../components/layout";
 import { PAGE_SIZE } from "../../constants";
+import { GetServerSidePropsContext } from "next";
+
 
 async function fetchNextPages(cursor?: string | null | undefined) {
   const url = queryString.stringifyUrl({
@@ -55,7 +57,7 @@ export default function ArticlesListTemplate({
   );
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps({ res }: GetServerSidePropsContext) {
   // Fetch the site and articles in parallel
   const [site, { data: articles, totalCount, cursor }] = await Promise.all([
     PCCConvenienceFunctions.getSite(),
@@ -63,6 +65,17 @@ export async function getServerSideProps() {
       pageSize: PAGE_SIZE,
     }),
   ]);
+
+
+  // Use a low s-maxage but I high stale-while-revalidate
+  // to increase the likelihood of both
+  // 1. a fast response from the CDN (thanks to serving stale for up to 24 hours)
+  // 2. New content getting displayed quickly
+  // (since the CDN should only consider a response fresh for 5 seconds)
+  res.setHeader(
+    'Cache-Control',
+    'public, s-maxage=5, stale-while-revalidate=86400'
+  );
 
   return {
     props: {
