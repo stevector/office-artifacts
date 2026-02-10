@@ -13,6 +13,23 @@ export function middleware(request: NextRequest) {
   // Use JSON.stringify for a clean, readable output of all headers
   console.log(JSON.stringify(headers, null, 2));
 
+
+
+  const incomingProtocol = request.headers.get('x-forwarded-proto') || '';
+  const xForwardedHost = request.headers.get('x-forwarded-host') || '';
+  console.log('incomingProtocol: ' + incomingProtocol + ' xForwardedHost: ' + xForwardedHost);
+  if (incomingProtocol === 'http' && xForwardedHost) {
+      url.protocol = "https:";
+      url.hostname = xForwardedHost;
+      url.port = "";
+      // Use a 301 permanent redirect
+      return NextResponse.redirect(url.toString(), 301);
+  }
+
+
+
+  
+
   //x-fastly-orig-host
   // pcontext-site-env
   // x-proto
