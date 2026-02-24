@@ -14,7 +14,6 @@ export function middleware(request: NextRequest) {
   console.log(JSON.stringify(headers, null, 2));
 
 
-
   const incomingProtocol = request.headers.get('x-forwarded-proto') || '';
   const xForwardedHost = request.headers.get('x-forwarded-host') || '';
   console.log('incomingProtocol: ' + incomingProtocol + ' xForwardedHost: ' + xForwardedHost);
