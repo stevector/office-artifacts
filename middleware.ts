@@ -15,11 +15,11 @@ export function middleware(request: NextRequest) {
 
 
   const incomingProtocol = request.headers.get('x-forwarded-proto') || '';
-  const xForwardedHost = request.headers.get('x-forwarded-host') || '';
-  console.log('incomingProtocol: ' + incomingProtocol + ' xForwardedHost: ' + xForwardedHost);
-  if (incomingProtocol === 'http' && xForwardedHost) {
+  const pantheonHost = request.headers.get('pantheon-host') || '';
+  console.log('incomingProtocol: ' + incomingProtocol + ' pantheonHost: ' + pantheonHost);
+  if (incomingProtocol === 'http' && pantheonHost) {
       url.protocol = "https:";
-      url.hostname = xForwardedHost;
+      url.hostname = pantheonHost;
       url.port = "";
       // Use a 301 permanent redirect
       return NextResponse.redirect(url.toString(), 301);
