@@ -13,7 +13,6 @@ export function middleware(request: NextRequest) {
   // Use JSON.stringify for a clean, readable output of all headers
   console.log(JSON.stringify(headers, null, 2));
 
-
   const incomingProtocol = request.headers.get('x-forwarded-proto') || '';
   const pantheonHost = request.headers.get('pantheon-host') || '';
   console.log('incomingProtocol: ' + incomingProtocol + ' pantheonHost: ' + pantheonHost);
