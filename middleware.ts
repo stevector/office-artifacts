@@ -13,36 +13,15 @@ export function middleware(request: NextRequest) {
   // Use JSON.stringify for a clean, readable output of all headers
   console.log(JSON.stringify(headers, null, 2));
 
-  //x-fastly-orig-host
-  // pcontext-site-env
-  // x-proto
-  // Is the site Machine name available as an env var?
-  const siteMachineName = "office-artifacts";
-  const siteEnv = request.headers.get('pcontext-site-env') || '';
-  const incomingProtocol = request.headers.get('x-proto') || '';
-  const policyDocSurrogateKey = request.headers.get('policy-doc-surrogate-key') || '';
-  console.log('incomingProtocol: ' + incomingProtocol + ' policyDocSurrogateKey: ' + policyDocSurrogateKey);
-  if (incomingProtocol === 'http://' && policyDocSurrogateKey) {
-    if(policyDocSurrogateKey.trim().endsWith(siteMachineName + '.pantheonsite.io') ||
-      policyDocSurrogateKey === 'office-artifacts.stevector.com') {
-
-    url.protocol = "https:";
-    url.hostname = policyDocSurrogateKey;
-    url.port = "";
-    // Use a 301 permanent redirect
-    return NextResponse.redirect(url.toString(), 301);
-    }
-  }
-
-  if (siteEnv === 'pr-17' || siteEnv === 'live') {
-    console.log('inside siteEnv check');
-    if (policyDocSurrogateKey === 'pr-17-office-artifacts.pantheonsite.io' || policyDocSurrogateKey === 'live-office-artifacts.pantheonsite.io' || policyDocSurrogateKey === 'office-artifacts-redirect.stevector.com') {
+  const incomingProtocol = request.headers.get('x-forwarded-proto') || '';
+  const pantheonHost = request.headers.get('pantheon-host') || '';
+  console.log('incomingProtocol: ' + incomingProtocol + ' pantheonHost: ' + pantheonHost);
+  if (incomingProtocol === 'http://' && pantheonHost) {
       url.protocol = "https:";
-      url.hostname = "office-artifacts.stevector.com";
+      url.hostname = pantheonHost;
       url.port = "";
       // Use a 301 permanent redirect
       return NextResponse.redirect(url.toString(), 301);
-    }
   }
 
   const response = NextResponse.next();
