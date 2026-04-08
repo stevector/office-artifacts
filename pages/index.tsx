@@ -29,7 +29,7 @@ export default function Home({
           <div className="mx-auto px-6 py-24 sm:max-w-[533px] sm:px-0 lg:mx-0 lg:pl-24 xl:ml-32 xl:max-w-max xl:py-0 xl:pl-0">
             <p>WELCOME</p>
             <h1 className="my-3 text-5xl font-bold">
-              Time to make this site your own.
+              Time to make this site your own!!!
             </h1>
             <p>
               Your new website is waiting to be built for something amazing.
