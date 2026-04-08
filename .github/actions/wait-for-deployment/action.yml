@@ -7,7 +7,6 @@ inputs:
   target_env:
     description: ' '
     required: true
-
 runs:
     using: 'composite'
     steps:
